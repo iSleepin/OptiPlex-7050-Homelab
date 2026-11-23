@@ -22,10 +22,11 @@ All notable changes to this homelab project are documented in this file.
 - Intel VT-d enabled.
 - SLAT support confirmed.
 - Windows-reported SSD health status: Healthy.
+- Created bootable Proxmox VE installation USB using Rufus.
 
 ### Planned
 - Perform a detailed SSD SMART assessment.
-- Prepare bootable Proxmox VE installation media.
+- Configure Proxmox network settings.
 - Install Proxmox VE.
 - Configure Proxmox networking.
 - Deploy Linux and Windows Server virtual machines.
@@ -43,8 +44,9 @@ All notable changes to this homelab project are documented in this file.
 | Hardware inventory | Complete |
 | Hardware verification | Complete |
 | BIOS virtualization configuration | Complete |
+| Proxmox installation USB created | Complete |
 | Detailed SSD health assessment | Pending |
-| Proxmox installation media | Pending |
+| Proxmox network planning | Pending |
 | Proxmox VE installation | Pending |
 | Virtual machine deployment | Pending |
 | Network services | Pending |
