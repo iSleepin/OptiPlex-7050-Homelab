@@ -3,6 +3,27 @@
 
 All notable changes to the OptiPlex 7050 Homelab project are documented here.
 
+## [2026-11-23] - Docker Startup Reliability and Documentation
+
+### Troubleshooting and Infrastructure
+
+- Investigated Homepage and Technitium containers failing to start after a Proxmox host reboot.
+- Identified a startup race in which Docker attempted to bind published ports before the Debian VM received its reserved LAN address.
+- Enabled `ifupdown-wait-online.service` as an initial troubleshooting attempt; this did not guarantee the DHCP address was available.
+- Added a Docker systemd drop-in at `/etc/systemd/system/docker.service.d/wait-for-lan-ip.conf`.
+- Configured Docker to wait up to 120 seconds for the expected IPv4 address on `ens18` before starting.
+- Reloaded systemd and verified the Docker startup override.
+- Reboot-tested the Debian services VM and confirmed both containers started automatically.
+- Verified Homepage reported a healthy status and Technitium started successfully.
+- Verified both web interfaces were reachable from a Windows client after reboot.
+- Confirmed no Docker host-port binding errors appeared in the filtered boot journal.
+
+### Documentation
+
+- Expanded `06-docker/containers.md` with the Homepage deployment and Docker startup troubleshooting procedure.
+- Documented the initial unsuccessful wait-online approach, final systemd fix, verification steps, and lessons learned.
+- Used documentation-only IP placeholders to avoid publishing the actual LAN address.
+
 ## [2026-11-23] - Remote Access Milestone
 
 ### Added

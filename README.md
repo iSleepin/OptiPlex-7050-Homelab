@@ -1,4 +1,5 @@
 
+
 # OptiPlex 7050 Homelab
 
 A personal homelab project built around a Dell OptiPlex 7050 SFF running Proxmox VE. The goal is to develop practical IT infrastructure, Linux administration, networking, virtualization, Docker, and systems administration skills through hands-on projects.
@@ -45,6 +46,7 @@ The OptiPlex 7050 SFF provides a compact platform for learning virtualization an
 | Container Platform | Docker Engine |
 | Container Management | Docker Compose |
 | DNS Server | Technitium DNS Server |
+| Dashboard | Homepage |
 | Game Server Management | CubeCoders AMP |
 | Game Server | Minecraft Java Edition |
 | Minecraft Mod Loader | Minecraft Forge |
@@ -61,7 +63,7 @@ Proxmox VE is installed directly on the OptiPlex 7050 and serves as the bare-met
 
 - Installation type: Bare metal
 - Hostname: `pve`
-- Management address: `192.168.68.200`
+- Management address: `<PROXMOX-LAN-IP>`
 - Web interface: `https://proxmox.home.arpa:8006`
 - Storage: Local storage and LVM-thin
 
@@ -86,7 +88,7 @@ VM 100 hosts Docker and network services.
 | vCPU | 2 |
 | Memory | 4 GB |
 | Virtual Disk | 32 GB |
-| IP Address | `192.168.68.108` |
+| IP Address | `<DEBIAN-SERVICES-LAN-IP>` |
 | Administration | SSH and Tailscale |
 
 ### Docker Environment
@@ -104,9 +106,29 @@ Docker services are deployed using Docker Compose with persistent configuration 
 
 | Service | Container | Status |
 |---|---|---|
-| Technitium DNS Server | `technitium` | Running |
+| Technitium DNS Server | `technitium` | Running and verified after reboot |
+| Homepage | `homepage` | Running and verified after reboot |
 
-See [`06-docker/containers.md`](06-docker/containers.md) for deployment and management details.
+**Homepage Dashboard**
+
+Homepage provides a centralized dashboard with shortcuts to the homelab's management interfaces and applications.
+
+- Access: `http://<DEBIAN-SERVICES-LAN-IP>:3000`
+- Configuration directory: `/opt/homepage/config/`
+- Deployment directory: `/opt/homepage/`
+- Container image: `ghcr.io/gethomepage/homepage:latest`
+
+**Docker Startup Reliability**
+
+Docker is configured to wait for the Debian services VM's reserved LAN address on `ens18` before starting. This prevents containers with LAN-bound published ports from failing during boot if Docker starts before DHCP has assigned the address.
+
+The startup override is located at:
+
+`/etc/systemd/system/docker.service.d/wait-for-lan-ip.conf`
+
+The configuration waits up to 120 seconds for the expected IPv4 address before allowing Docker to start. It was verified through a VM reboot, after which both Homepage and Technitium started successfully.
+
+See [`06-docker/containers.md`](06-docker/containers.md) for deployment, configuration, troubleshooting, and management details.
 
 ### AMP Game Server VM
 
@@ -120,9 +142,9 @@ VM 101 is dedicated to CubeCoders AMP and game-server management.
 | vCPU | 4 |
 | Memory | 12 GB |
 | Virtual Disk | 100 GB |
-| IP Address | `192.168.68.104` |
+| IP Address | `<AMP-LAN-IP>` |
 | Management Software | CubeCoders AMP |
-| AMP Web Interface | `http://192.168.68.104:8080` |
+| AMP Web Interface | `http://<AMP-LAN-IP>:8080` |
 
 AMP is configured in Standalone mode and manages game-server instances on the Debian VM.
 
@@ -142,7 +164,7 @@ A modded Minecraft Java server is managed through AMP.
 | Java Runtime | Eclipse Temurin 17 |
 | AMP Instance Management | AMP |
 | Server VM | VM 101 |
-| Local Server Address | `192.168.68.104:25565` |
+| Local Server Address | `<AMP-LAN-IP>:25565` |
 | Public Connectivity | Playit.gg |
 
 The server pack was transferred and extracted into the AMP instance directory. The server was successfully started through AMP.
@@ -161,12 +183,12 @@ The TP-Link Deco M9 Plus remains responsible for routing and DHCP. Technitium ha
 
 | Setting | Value |
 |---|---|
-| Network | `192.168.68.0/24` |
-| Subnet Mask | `255.255.255.0` |
-| Default Gateway | `192.168.68.1` |
+| Network | `<LAN-SUBNET>` |
+| Subnet Mask | `<SUBNET-MASK>` |
+| Default Gateway | `<GATEWAY-IP>` |
 | DHCP Server | TP-Link Deco M9 Plus |
-| DHCP Pool | `192.168.68.100`–`192.168.68.250` |
-| Primary DNS | `192.168.68.108` |
+| DHCP Pool | `<DHCP-POOL-START>` – `<DHCP-POOL-END>` |
+| Primary DNS | `<DEBIAN-SERVICES-LAN-IP>` |
 
 ### DNS Infrastructure
 
@@ -183,8 +205,8 @@ Technitium DNS Server runs in Docker on the Debian services VM.
 
 | Hostname | IP Address | Service |
 |---|---|---|
-| `proxmox.home.arpa` | `192.168.68.200` | Proxmox VE |
-| `dns.home.arpa` | `192.168.68.108` | Technitium DNS |
+| `proxmox.home.arpa` | `<PROXMOX-LAN-IP>` | Proxmox VE |
+| `dns.home.arpa` | `<DEBIAN-SERVICES-LAN-IP>` | Technitium DNS |
 
 ### Service Access
 
@@ -192,7 +214,8 @@ Technitium DNS Server runs in Docker on the Debian services VM.
 |---|---|
 | Proxmox VE | `https://proxmox.home.arpa:8006` |
 | Technitium DNS | `http://dns.home.arpa:5380` |
-| AMP | `http://192.168.68.104:8080` |
+| Homepage | `http://<DEBIAN-SERVICES-LAN-IP>:3000` |
+| AMP | `http://<AMP-LAN-IP>:8080` |
 
 ### DNS Verification
 
@@ -298,7 +321,7 @@ See [`08-backups/backup-strategy.md`](08-backups/backup-strategy.md).
 | 4 | Windows Server and Active Directory | Planned |
 | 5 | Storage, NAS, and backup infrastructure | In Progress |
 | 6 | Media and game server applications | In Progress |
-| 7 | Monitoring and dashboards | Planned |
+| 7 | Monitoring and dashboards | In Progress |
 | 8 | Security hardening | Planned |
 | 9 | Troubleshooting and incident documentation | Ongoing |
 | 10 | Portfolio documentation and project polish | Ongoing |
@@ -345,7 +368,7 @@ The following services are potential future additions. They are not considered d
 
 - Uptime Kuma
 - Beszel
-- Homepage or Homarr
+- Live service and infrastructure metrics
 
 ### Security
 
@@ -421,6 +444,7 @@ This repository is intended to be an accurate technical record of the homelab.
 - Record troubleshooting steps and lessons learned.
 - Keep credentials, passwords, API tokens, MAC addresses, and device serial numbers out of public documentation.
 - Do not publish public IP addresses or private authentication details.
+- Use placeholders for private LAN addressing in public documentation.
 - Avoid publishing private Tailscale addresses and actual public tunnel hostnames.
 - Update the changelog when meaningful milestones are completed.
 - Document significant configuration changes and infrastructure decisions.
@@ -459,3 +483,4 @@ Project: OptiPlex 7050 Homelab
 Platform: Dell OptiPlex 7050 SFF  
 Hypervisor: Proxmox VE  
 Repository: [GitHub - OptiPlex-7050-Homelab](https://github.com/iSleepin/OptiPlex-7050-Homelab)
+
