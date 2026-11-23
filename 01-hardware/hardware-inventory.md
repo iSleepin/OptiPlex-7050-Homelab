@@ -45,8 +45,8 @@ The SSD was dedicated to the Proxmox installation. The previous Windows installa
 - Adapter: Intel Ethernet Connection (5) I219-LM
 - Link speed: 1 Gbps
 - Connection type: Ethernet
-- Proxmox management IP: `192.168.68.200`
-- Default gateway: `192.168.68.1`
+- Proxmox management IP: `<PROXMOX-LAN-IP>`
+- Default gateway: `<LAN-GATEWAY-IP>`
 
 ## Intended Use
 

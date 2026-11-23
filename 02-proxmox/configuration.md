@@ -7,11 +7,11 @@
 |---|---|
 | Hypervisor | Proxmox VE |
 | Node Name | `pve` |
-| Management IP | `192.168.68.200` |
+| Management IP | `<PROXMOX-LAN-IP>` |
 | Subnet | `/24` |
-| Gateway | `192.168.68.1` |
-| DNS Server | `192.168.68.1` |
-| Web Interface | `https://192.168.68.200:8006` |
+| Gateway | `<LAN-GATEWAY-IP>` |
+| DNS Server | `<LAN-GATEWAY-IP>` |
+| Web Interface | `https://<PROXMOX-LAN-IP>:8006` |
 
 ## System Resources
 
@@ -49,9 +49,9 @@ The Proxmox host is connected to the home network through the Intel I219-LM Giga
 |---|---|
 | Network Interface | `nic0` |
 | Router | TP-Link Deco M9 Plus |
-| Gateway | `192.168.68.1` |
-| Proxmox IP | `192.168.68.200/24` |
-| DNS | `192.168.68.1` |
+| Gateway | `<LAN-GATEWAY-IP>` |
+| Proxmox IP | `<PROXMOX-LAN-IP>/24` |
+| DNS | `<LAN-GATEWAY-IP>` |
 
 The host IP address is reserved in the Deco router's address reservation configuration.
 
@@ -60,7 +60,8 @@ The host IP address is reserved in the Deco router's address reservation configu
 ### Local Gateway
 
 ```bash
-ping -c 4 192.168.68.1
+GATEWAY_IP="<LAN-GATEWAY-IP>"  # Replace the placeholder before running
+ping -c 4 "$GATEWAY_IP"
 ```
 
 Result: Successful, 0% packet loss.
@@ -77,7 +78,7 @@ Result: Successful DNS resolution and connectivity, 0% packet loss.
 
 The Proxmox web interface is accessible from another device on the local network:
 
-`https://192.168.68.200:8006`
+`https://<PROXMOX-LAN-IP>:8006`
 
 Administrative access uses the root account configured during installation.
 

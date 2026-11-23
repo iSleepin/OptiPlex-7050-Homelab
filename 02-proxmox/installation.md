@@ -35,9 +35,9 @@ The installation replaced the previous Windows installation.
 | Storage Layout | Default LVM and LVM-thin |
 | Hostname | `pve` |
 | Management Interface | `nic0` |
-| Management IP | `192.168.68.200/24` |
-| Gateway | `192.168.68.1` |
-| DNS Server | `192.168.68.1` |
+| Management IP | `<PROXMOX-LAN-IP>/24` |
+| Gateway | `<LAN-GATEWAY-IP>` |
+| DNS Server | `<LAN-GATEWAY-IP>` |
 | Region | United States |
 | Time Zone | America/Los_Angeles |
 | Keyboard Layout | en-US |
@@ -48,12 +48,12 @@ The homelab is connected to a TP-Link Deco M9 Plus mesh network operating in Rou
 
 | Network Setting | Value |
 |---|---|
-| Router / Gateway | `192.168.68.1` |
+| Router / Gateway | `<LAN-GATEWAY-IP>` |
 | Subnet Mask | `255.255.255.0` |
-| Network | `192.168.68.0/24` |
-| DHCP Server | `192.168.68.1` |
-| DHCP Range | `192.168.68.100` – `192.168.68.250` |
-| Proxmox Reserved IP | `192.168.68.200` |
+| Network | `<LAN-SUBNET>` |
+| DHCP Server | `<LAN-GATEWAY-IP>` |
+| DHCP Range | `<DHCP-POOL-START-IP>` – `<DHCP-POOL-END-IP>` |
+| Proxmox Reserved IP | `<PROXMOX-LAN-IP>` |
 
 The Proxmox host address was reserved in the router's address reservation settings.
 
@@ -63,7 +63,7 @@ Proxmox VE installed successfully and the system rebooted into the Proxmox envir
 
 The web management interface was accessible at:
 
-`https://192.168.68.200:8006`
+`https://<PROXMOX-LAN-IP>:8006`
 
 The initial subscription notification was dismissed. The installation is being used without a paid subscription.
 
@@ -76,7 +76,8 @@ The following checks were completed from the Proxmox host shell.
 Command:
 
 ```bash
-ping -c 4 192.168.68.1
+GATEWAY_IP="<LAN-GATEWAY-IP>"  # Replace the placeholder before running
+ping -c 4 "$GATEWAY_IP"
 ```
 
 Result:
