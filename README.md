@@ -321,7 +321,7 @@ See [`08-backups/backup-strategy.md`](08-backups/backup-strategy.md).
 | 4 | Windows Server and Active Directory | Planned |
 | 5 | Storage, NAS, and backup infrastructure | In Progress |
 | 6 | Media and game server applications | In Progress |
-| 7 | Monitoring and dashboards | In Progress |
+| 7 | Monitoring and dashboards | Planned (Homepage shortcuts deployed; live metrics not deployed) |
 | 8 | Security hardening | Planned |
 | 9 | Troubleshooting and incident documentation | Ongoing |
 | 10 | Portfolio documentation and project polish | Ongoing |
