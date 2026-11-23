@@ -1,40 +1,65 @@
 # Dell OptiPlex 7050 Homelab
 
-## Overview
+A self-hosted homelab project built using a Dell OptiPlex 7050 Small Form Factor (SFF). The goal is to gain practical experience with IT infrastructure, virtualization, networking, Linux and Windows Server administration, containerization, storage, security, and self-hosted applications.
 
-This project documents the planning, deployment, configuration, and maintenance of a personal homelab built using a Dell OptiPlex 7050 Small Form Factor (SFF) desktop.
+This project also serves as a technical portfolio documenting hands-on learning, configurations, troubleshooting, and implementation progress.
 
-The goal is to develop practical, hands-on experience with IT infrastructure, systems administration, networking, virtualization, storage, cybersecurity, and self-hosted applications.
-
-This homelab is designed as an educational environment for building and documenting technical skills relevant to IT Support, Help Desk, and Systems Administration roles.
-
-## Hardware
+## Hardware Specifications
 
 | Component | Specification |
 |---|---|
-| System | Dell OptiPlex 7050 SFF |
-| Processor | Intel Core i7-7700 |
+| Manufacturer | Dell |
+| Model | OptiPlex 7050 |
+| Form Factor | Small Form Factor (SFF) |
+| CPU | Intel Core i7-7700 |
 | CPU Cores / Threads | 4 Cores / 8 Threads |
-| Memory | 32 GB DDR4 RAM |
-| Primary Storage | 1 TB SSD |
+| CPU Base Frequency | 3.60 GHz |
+| RAM | 32 GB DDR4 |
+| RAM Configuration | 2 × 16 GB |
+| RAM Speed | 2667 MHz |
+| Storage | KingFast 1 TB SATA SSD |
+| Reported SSD Capacity | 953.87 GB |
 | Graphics | Intel HD Graphics 630 |
-| Networking | Gigabit Ethernet |
-| Operating System | Windows 10 Pro 22H2 |
+| Network Adapter | Intel Ethernet Connection (5) I219-LM |
+| Network Speed | 1 Gbps |
+| BIOS | Dell 1.27.0 |
+
+### Virtualization Support
+
+| Feature | Status |
+|---|---|
+| Intel VT-x | Enabled |
+| Intel VT-d | Enabled |
+| SLAT | Supported |
+
+## Project Goals
+
+- Learn and implement bare-metal virtualization using Proxmox VE.
+- Deploy and manage Linux and Windows Server virtual machines.
+- Develop practical networking and infrastructure administration skills.
+- Configure DNS, DHCP, and remote access services.
+- Learn Docker and Docker Compose.
+- Build self-hosted applications and services.
+- Implement storage, backup, and recovery solutions.
+- Configure system monitoring and dashboards.
+- Practice security hardening and troubleshooting.
+- Document technical work for professional portfolio development.
 
 ## Planned Technologies
 
 ### Virtualization
 - Proxmox VE
 - Linux Virtual Machines
-- Windows Server Virtual Machine
+- Windows Server Virtual Machines
 
 ### Networking
-- DNS and DHCP
-- Pi-hole / AdGuard
+- DNS
+- DHCP
+- Pi-hole or AdGuard
 - Tailscale
-- InternalDNS
+- Internal DNS
 
-### Systems Administration
+### System Administration
 - Linux Administration
 - Windows Server
 - Active Directory
@@ -45,58 +70,44 @@ This homelab is designed as an educational environment for building and document
 - Docker
 - Docker Compose
 - Immich
+- Jellyfin or Plex
 - Nextcloud
 - Syncthing
-- Jellyfin / Plex
-- AMP Game Server
+- AMP
+- Minecraft Server
+- Playit.gg
 
 ### Storage and Backups
 - Proxmox Backup Server
 - Network File Sharing
-- Automated Backups
-- Backup Restoration Testing
+- SMB
+- Storage Management
+- Backup and Restore Testing
 
-### Monitoring and Management
+### Monitoring and Dashboards
 - Uptime Kuma
 - Beszel
-- Homepage / Homarr / Heimdall
+- Homepage, Homarr, or Heimdall
 
-## Project Objectives
+## Project Roadmap
 
-- Deploy and manage a bare-metal virtualization environment.
-- Configure and administer Linux and Windows Server systems.
-- Build and troubleshoot virtual networks and infrastructure services.
-- Implement DNS, DHCP, VPN, and network security.
-- Deploy and maintain Docker containers.
-- Configure centralized storage, file sharing, and backups.
-- Host self-managed applications and game servers.
-- Monitor system performance, availability, and resource utilization.
-- Document configurations, troubleshooting procedures, and lessons learned.
-
-## Repository Structure
-
-| Directory | Description |
-|---|---|
-| `01-hardware/` | Hardware inventory, BIOS, and upgrades |
-| `02-proxmox/` | Proxmox installation and configuration |
-| `03-networking/` | Network topology, DNS, DHCP, and VPN |
-| `04-linux/` | Linux administration |
-| `05-windows-server/` | Active Directory and Windows Server |
-| `06-docker/` | Docker and container management |
-| `07-storage/` | Storage and file-sharing services |
-| `08-backups/` | Backup strategy and recovery |
-| `09-applications/` | Self-hosted applications |
-| `10-monitoring/` | Monitoring and dashboards |
-| `11-security/` | Security configuration and hardening |
-| `12-troubleshooting/` | Troubleshooting and incident documentation |
-| `13-network-diagrams/` | Network diagrams and infrastructure layouts |
-| `14-resume-evidence/` | Technical skills and project accomplishments |
+| Phase | Description | Status |
+|---|---|---|
+| 0 | Hardware Preparation and Verification | Complete |
+| 1 | Proxmox VE Installation | In Progress |
+| 2 | Networking and Network Services | Planned |
+| 3 | Linux Administration and Docker | Planned |
+| 4 | Windows Server and Active Directory | Planned |
+| 5 | Storage, NAS, and Backups | Planned |
+| 6 | Media and Game Server Applications | Planned |
+| 7 | Monitoring and Dashboards | Planned |
+| 8 | Security Hardening | Planned |
+| 9 | Troubleshooting and Incident Documentation | Planned |
+| 10 | Portfolio Documentation and Improvements | Planned |
 
 ## Project Status
 
-**Current Phase: Phase 0 — Hardware Verification Complete**
-
-The Dell OptiPlex 7050 SFF has been inspected and its primary hardware specifications have been verified.
+**Current Phase: Phase 1 — Proxmox VE Installation Preparation**
 
 ### Completed
 
@@ -111,12 +122,13 @@ The Dell OptiPlex 7050 SFF has been inspected and its primary hardware specifica
 - [x] Intel VT-x enabled
 - [x] Intel VT-d enabled
 - [x] SLAT support confirmed
+- [x] Proxmox VE installation USB created using Rufus
 
-### In Progress / Upcoming
+### Upcoming
 
 - [ ] Detailed SSD SMART assessment
-- [ ] Prepare Proxmox VE installation USB
-- [ ] Install Proxmox VE
+- [ ] Proxmox network configuration planning
+- [ ] Proxmox VE installation
 - [ ] Configure Proxmox networking
 - [ ] Deploy virtual machines and containers
 - [ ] Configure network services
@@ -125,44 +137,66 @@ The Dell OptiPlex 7050 SFF has been inspected and its primary hardware specifica
 - [ ] Deploy monitoring tools
 - [ ] Implement security hardening
 
-The project is currently transitioning from hardware verification to Proxmox VE installation preparation.
+## Repository Structure
 
-**Note:** Planned services and technologies are not considered deployed until installation, configuration, and testing are complete.
+```text
+optiplex-7050-homelab/
+│
+├── README.md
+├── CHANGELOG.md
+│
+├── 01-hardware/
+│   ├── hardware-inventory.md
+│   ├── upgrade-log.md
+│   ├── bios-configuration.md
+│   └── storage-health.md
+│
+├── 02-proxmox/
+│   ├── installation.md
+│   ├── configuration.md
+│   └── vm-inventory.md
+│
+├── 03-networking/
+│   ├── network-overview.md
+│   ├── ip-address-plan.md
+│   ├── dns-dhcp.md
+│   └── tailscale.md
+│
+├── 04-linux/
+├── 05-windows-server/
+├── 06-docker/
+├── 07-storage/
+├── 08-backups/
+├── 09-applications/
+├── 10-monitoring/
+├── 11-security/
+├── 12-troubleshooting/
+├── 13-network-diagrams/
+└── 14-resume-evidence/
+```
 
 ## Documentation
 
 - [Hardware Inventory](01-hardware/hardware-inventory.md)
-- [Hardware Upgrade Log](01-hardware/upgrade-log.md)
 - [BIOS Configuration](01-hardware/bios-configuration.md)
-- [Proxmox Documentation](02-proxmox/)
-- [Networking Documentation](03-networking/)
-- [Linux Administration](04-linux/)
-- [Windows Server](05-windows-server/)
-- [Docker Documentation](06-docker/)
-- [Storage Documentation](07-storage/)
-- [Backup Documentation](08-backups/)
-- [Application Documentation](09-applications/)
-- [Monitoring Documentation](10-monitoring/)
-- [Security Documentation](11-security/)
-- [Troubleshooting Logs](12-troubleshooting/)
+- [Storage Health](01-hardware/storage-health.md)
+- [Changelog](CHANGELOG.md)
 
 ## Learning Outcomes
 
-This project is intended to demonstrate practical experience with:
+This project is intended to develop practical experience in:
 
-- Virtualization and infrastructure management
-- Operating system installation and administration
-- TCP/IP networking, DNS, and DHCP
+- Hardware identification and troubleshooting
+- Hypervisor installation and management
+- Virtual machine provisioning
+- Network configuration and troubleshooting
+- Linux and Windows Server administration
 - Active Directory and Group Policy
-- Linux command-line administration
-- Docker containerization
-- Storage management and backup recovery
-- Network security and remote access
-- System monitoring and troubleshooting
-- Technical documentation
+- Container management
+- Storage and backup administration
+- Security configuration
+- Monitoring and incident troubleshooting
 
 ## Disclaimer
 
-This is an independent educational homelab project. All configurations, deployments, troubleshooting activities, and results will be documented as they are completed.
-
-Technologies listed as planned are not necessarily deployed or operational.
+This repository documents a personal homelab and independent learning project. Technologies listed as planned are not necessarily installed or operational. Implementation status will be updated as each service is configured and tested.
