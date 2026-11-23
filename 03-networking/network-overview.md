@@ -2,48 +2,65 @@
 
 ## Network Architecture
 
-The homelab uses a TP-Link Deco M9 Plus mesh router as its gateway and DHCP server. Proxmox VE hosts the virtual machines, while a Debian VM provides Docker-based network services.
+The homelab uses a TP-Link Deco M9 Plus mesh router in Router Mode for routing and DHCP. Proxmox VE runs on a Dell OptiPlex 7050 SFF and hosts two Debian virtual machines.
+
+The Debian services VM provides Docker-based DNS and dashboard services. A separate Debian VM runs CubeCoders AMP and the Linggango Minecraft server.
+
+Private LAN addresses are represented by placeholders in this public repository.
 
 ## Network Topology
 
 ```text
-                         Internet
-                            |
-                            |
-                  TP-Link Deco M9 Plus
-                    192.168.68.1
-                    Router / DHCP
-                            |
-                      Local Network
-                     192.168.68.0/24
-                            |
-             +--------------+--------------+
-             |                             |
-       Windows Client                 Proxmox VE
-       192.168.68.110                 192.168.68.200
-                                           |
-                                      Virtual Bridge
-                                           |
-                                    Debian Services VM
-                                      192.168.68.108
-                                           |
-                                      Docker Engine
-                                           |
-                                   Technitium DNS
-                                      TCP/UDP 53
-                                      TCP 5380
-                                           |
-                                    Cloudflare DoH
+                                  Internet
+                                     |
+                            TP-Link Deco M9 Plus
+                              Router / DHCP
+                           <LAN-GATEWAY-IP>
+                                     |
+                              Local Network
+                               <LAN-SUBNET>
+                                     |
+              +----------------------+---------------------+
+              |                                            |
+       Windows Admin PC                              Proxmox VE
+        Tailscale client                           <PROXMOX-LAN-IP>
+                                                         |
+                                                   Virtual Bridge
+                                                      vmbr0
+                                                         |
+                            +----------------------------+---------------------+
+                            |                                                  |
+                    VM 100: debian-services                            VM 101: amp-server
+                    <DEBIAN-SERVICES-LAN-IP>                            <AMP-SERVER-LAN-IP>
+                            |                                                  |
+                     Docker Engine                                      CubeCoders AMP
+                       /        \                                           TCP 8080
+                      /          \
+             Technitium DNS     Homepage                                Minecraft Java
+              TCP/UDP 53         TCP 3000                                TCP 25565
+              TCP 5380                                                       |
+                    |                                                  Playit agent
+             Tailscale Serve                                           127.0.0.1:25565
+             Tailnet-only HTTPS                                              |
+                                                                       Public Minecraft
+                                                                         tunnel only
 ```
+
+Tailscale is installed on the Proxmox host, both Debian VMs, and the Windows administration computer. It provides private remote administration without exposing management interfaces directly to the internet.
+
+Playit.gg provides public connectivity exclusively to the Minecraft server. The Playit agent forwards traffic to the local Minecraft listener at `127.0.0.1:25565`. No router port forwarding is configured for these services.
 
 ## Network Address Plan
 
-| Device / Service | IP Address | Purpose |
+| Device / Service | Address | Purpose |
 |---|---|---|
-| TP-Link Deco M9 Plus | `192.168.68.1` | Default gateway and DHCP |
-| Proxmox VE | `192.168.68.200` | Hypervisor |
-| Debian Services VM | `192.168.68.108` | Linux and Docker host |
-| Windows Client | `192.168.68.110` | Administration workstation |
+| TP-Link Deco M9 Plus | `<LAN-GATEWAY-IP>` | Default gateway and DHCP |
+| Proxmox VE | `<PROXMOX-LAN-IP>` | Hypervisor |
+| Debian Services VM | `<DEBIAN-SERVICES-LAN-IP>` | Linux and Docker host |
+| AMP Server VM | `<AMP-SERVER-LAN-IP>` | AMP and game server host |
+| Windows administration PC | `<ADMIN-WORKSTATION-LAN-IP>` | Administration workstation |
+
+The Deco router maintains the DHCP pool and reservations. Actual private addresses and the exact DHCP range are intentionally omitted from this public document.
 
 ## Infrastructure Details
 
@@ -51,15 +68,13 @@ The homelab uses a TP-Link Deco M9 Plus mesh router as its gateway and DHCP serv
 
 - Model: TP-Link Deco M9 Plus
 - Operating mode: Router Mode
-- Gateway: `192.168.68.1`
-- Subnet: `192.168.68.0/24`
 - DHCP server: Enabled
-- DHCP pool: `192.168.68.100`–`192.168.68.250`
+- DHCP reservations: Configured for the Proxmox host and both VMs
 
 ### Hypervisor
 
 - Platform: Proxmox VE
-- Host IP: `192.168.68.200`
+- Hostname: `pve`
 - Management interface: TCP port `8006`
 - Virtual network bridge: `vmbr0`
 
@@ -68,38 +83,64 @@ The homelab uses a TP-Link Deco M9 Plus mesh router as its gateway and DHCP serv
 - VM ID: `100`
 - Guest OS: Debian 13
 - Hostname: `debian-services`
-- IP address: `192.168.68.108`
 - vCPU allocation: 2
 - Memory allocation: 4 GB
 - Virtual disk: 32 GB
 - Container platform: Docker Engine and Docker Compose
 
-### DNS Infrastructure
+Services hosted on VM 100:
 
-- DNS platform: Technitium DNS Server
-- Deployment: Docker Compose
-- Internal zone: `home.arpa`
-- Upstream DNS: Cloudflare DNS-over-HTTPS
-- DNS ports: TCP/UDP 53
+- Technitium DNS Server (TCP/UDP 53 and web administration TCP 5380)
+- Homepage dashboard (TCP 3000)
+- Tailscale Serve for private HTTPS access to Technitium
+
+### AMP Virtual Machine
+
+- VM ID: `101`
+- Guest OS: Debian 13
+- Hostname: `amp-server`
+- vCPU allocation: 4
+- Memory allocation: 12 GB
+- Virtual disk: 100 GB
+
+Services hosted on VM 101:
+
+- CubeCoders AMP management (TCP 8080)
+- Linggango Minecraft Java server (TCP 25565)
+- Playit agent for public Minecraft connectivity
 
 ## Internal Service Naming
+
+The internal DNS zone is `home.arpa`.
 
 | Hostname | Service |
 |---|---|
 | `proxmox.home.arpa` | Proxmox VE |
 | `dns.home.arpa` | Technitium DNS |
 
+## Remote Access Design
+
+| Access Method | Purpose | Exposure |
+|---|---|---|
+| Tailscale | Private administration of Proxmox, Debian VMs, AMP, and Technitium | Tailnet only |
+| Tailscale Serve | Private HTTPS access to Technitium web administration | Tailnet only |
+| Playit.gg | Public Minecraft Java connectivity | Minecraft tunnel only |
+
+Administrative services are not published through Playit.gg. Tailscale Funnel is not enabled.
+
 ## Network Design Decisions
 
-- The Deco router remains responsible for DHCP.
-- Technitium handles DNS resolution for DHCP clients.
-- Docker services run inside the Debian VM rather than directly on the Proxmox host.
+- The Deco router remains responsible for routing and DHCP.
+- Technitium handles DNS resolution for clients configured to use it.
+- Docker services run inside the Debian services VM rather than directly on the Proxmox host.
 - The `home.arpa` namespace is used for internal DNS.
-- Infrastructure services use reserved or assigned IP addresses to maintain consistent access.
+- Infrastructure devices use DHCP reservations for consistent private addressing.
+- Tailscale is used for private remote administration.
+- Playit.gg is used only for public Minecraft connectivity.
 
 ## Future Network Improvements
 
-- Configure Tailscale for secure remote administration.
-- Add DNS records as additional services are deployed.
-- Develop a more detailed network diagram as the environment grows.
 - Evaluate network segmentation and firewall policies.
+- Add internal DNS records as additional services are deployed.
+- Develop a more detailed network diagram as the environment grows.
+- Review DNS filtering behavior across clients and encrypted-DNS configurations.

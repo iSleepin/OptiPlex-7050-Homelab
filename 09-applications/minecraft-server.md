@@ -20,7 +20,7 @@ Public Minecraft connectivity is provided through Playit.gg. Private server admi
 | VM Memory | 12 GB |
 | Virtual Disk | 100 GB |
 | Server Management | CubeCoders AMP |
-| LAN Server Address | `192.168.68.104` |
+| LAN Server Address | `<AMP-SERVER-LAN-IP>` |
 
 ## Minecraft Configuration
 
@@ -114,13 +114,13 @@ These are initial recommendations, not verified performance benchmarks.
 The server is hosted at:
 
 ```text
-192.168.68.104:25565
+<AMP-SERVER-LAN-IP>:25565
 ```
 
 AMP management interface:
 
 ```text
-http://192.168.68.104:8080
+http://<AMP-SERVER-LAN-IP>:8080
 ```
 
 The AMP management interface is intended for private administration through the local network or Tailscale.

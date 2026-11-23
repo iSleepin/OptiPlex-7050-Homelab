@@ -44,7 +44,7 @@ The AMP installation includes the management instance `ADS01`.
 The AMP management interface is available through the local network:
 
 ```text
-http://AMP-LAN-IP:8080
+http://<AMP-SERVER-LAN-IP>:8080
 ```
 
 The AMP VM also has private Tailscale connectivity for remote administration.
@@ -137,7 +137,7 @@ Current retention settings:
 
 | Setting | Value |
 |---|---|
-| Schedule | Hourly |
+| Schedule | Configured as hourly; execution not yet verified |
 | Retention Count | 24 |
 | Backup Storage | `./Backups/` |
 | Compression | Optimal |

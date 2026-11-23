@@ -15,7 +15,7 @@ The environment currently uses two Debian 13 virtual machines with separate resp
 |---|---|
 | Hypervisor | Proxmox VE |
 | Hostname | `pve` |
-| Management IP | `192.168.68.200` |
+| Management IP | `<PROXMOX-LAN-IP>` |
 | CPU | Intel Core i7-7700 |
 | Physical Cores | 4 |
 | Logical Threads | 8 |
@@ -26,8 +26,8 @@ The environment currently uses two Debian 13 virtual machines with separate resp
 
 | VM ID | Name | Operating System | vCPU | RAM | Disk | IP Address | Purpose |
 |---|---|---|---:|---:|---:|---|---|
-| 100 | `debian-services` | Debian 13 | 2 | 4 GB | 32 GB | `192.168.68.108` | Docker and network services |
-| 101 | `amp-server` | Debian 13 | 4 | 12 GB | 100 GB | `192.168.68.104` | AMP and game servers |
+| 100 | `debian-services` | Debian 13 | 2 | 4 GB | 32 GB | `<DEBIAN-SERVICES-LAN-IP>` | Docker and network services |
+| 101 | `amp-server` | Debian 13 | 4 | 12 GB | 100 GB | `<AMP-SERVER-LAN-IP>` | AMP and game servers |
 
 ## VM 100 - Debian Services
 
@@ -42,8 +42,8 @@ The environment currently uses two Debian 13 virtual machines with separate resp
 | Memory | 4 GB |
 | Virtual Disk | 32 GB |
 | Network Adapter | VirtIO |
-| IP Address | `192.168.68.108` |
-| Default Gateway | `192.168.68.1` |
+| IP Address | `<DEBIAN-SERVICES-LAN-IP>` |
+| Default Gateway | `<LAN-GATEWAY-IP>` |
 | Administration | SSH |
 | QEMU Guest Agent | Installed and running |
 
@@ -62,7 +62,7 @@ Current services include:
 SSH access:
 
 ```bash
-ssh homelab@192.168.68.108
+ssh homelab@<DEBIAN-SERVICES-LAN-IP>
 ```
 
 Technitium administration:
@@ -85,8 +85,8 @@ Technitium administration:
 | Memory Ballooning | Disabled |
 | Virtual Disk | 100 GB |
 | Network Adapter | VirtIO |
-| IP Address | `192.168.68.104` |
-| Default Gateway | `192.168.68.1` |
+| IP Address | `<AMP-SERVER-LAN-IP>` |
+| Default Gateway | `<LAN-GATEWAY-IP>` |
 | BIOS | SeaBIOS |
 | Machine Type | i440fx |
 | SCSI Controller | VirtIO SCSI Single |
@@ -111,14 +111,16 @@ AMP manages game-server instances within this virtual machine. This keeps game-s
 SSH access:
 
 ```bash
-ssh homelab@192.168.68.104
+ssh homelab@<AMP-SERVER-LAN-IP>
 ```
 
 AMP web interface:
 
-`http://192.168.68.104:8080`
+`http://<AMP-SERVER-LAN-IP>:8080`
 
 AMP is configured in Standalone mode. Its management instance is named `ADS01`.
+
+The VM is also connected to the private Tailscale network for remote administration.
 
 ### Current Game Server
 
@@ -136,10 +138,10 @@ Both virtual machines use the Proxmox virtual bridge and receive addresses on th
 
 | Component | Address |
 |---|---|
-| Proxmox VE | `192.168.68.200` |
-| Debian Services VM | `192.168.68.108` |
-| AMP Server VM | `192.168.68.104` |
-| Default Gateway | `192.168.68.1` |
+| Proxmox VE | `<PROXMOX-LAN-IP>` |
+| Debian Services VM | `<DEBIAN-SERVICES-LAN-IP>` |
+| AMP Server VM | `<AMP-SERVER-LAN-IP>` |
+| Default Gateway | `<LAN-GATEWAY-IP>` |
 
 The TP-Link Deco M9 Plus provides DHCP reservations for the virtual machines.
 

@@ -3,6 +3,19 @@
 
 All notable changes to the OptiPlex 7050 Homelab project are documented here.
 
+## [2026-11-23] - Public Documentation Security and Accuracy Review
+
+### Security and Documentation
+
+- Replaced private LAN and Tailscale addresses with descriptive placeholders in public documentation.
+- Removed the actual Windows administration hostname and private MagicDNS hostname from the public Tailscale documentation.
+- Located Tailscale documentation under `03-networking/tailscale.md` to match the networking documentation structure and README links.
+- Updated DNS documentation to reflect the enabled HaGeZi Multi Normal block list and its 24-hour refresh interval.
+- Updated the network overview to include both Debian VMs, Homepage, Technitium, AMP, Tailscale Serve, and the Playit Minecraft tunnel.
+- Corrected stale future-work statements for already deployed remote access and DNS filtering.
+- Clarified that AMP's hourly backup schedule and successful backup creation remain unverified.
+- Corrected the README repository tree to list only files currently present in the repository.
+
 ## [2026-11-23] - Docker Startup Reliability and Documentation
 
 ### Troubleshooting and Infrastructure

@@ -142,9 +142,9 @@ VM 101 is dedicated to CubeCoders AMP and game-server management.
 | vCPU | 4 |
 | Memory | 12 GB |
 | Virtual Disk | 100 GB |
-| IP Address | `<AMP-LAN-IP>` |
+| IP Address | `<AMP-SERVER-LAN-IP>` |
 | Management Software | CubeCoders AMP |
-| AMP Web Interface | `http://<AMP-LAN-IP>:8080` |
+| AMP Web Interface | `http://<AMP-SERVER-LAN-IP>:8080` |
 
 AMP is configured in Standalone mode and manages game-server instances on the Debian VM.
 
@@ -164,7 +164,7 @@ A modded Minecraft Java server is managed through AMP.
 | Java Runtime | Eclipse Temurin 17 |
 | AMP Instance Management | AMP |
 | Server VM | VM 101 |
-| Local Server Address | `<AMP-LAN-IP>:25565` |
+| Local Server Address | `<AMP-SERVER-LAN-IP>:25565` |
 | Public Connectivity | Playit.gg |
 
 The server pack was transferred and extracted into the AMP instance directory. The server was successfully started through AMP.
@@ -185,9 +185,9 @@ The TP-Link Deco M9 Plus remains responsible for routing and DHCP. Technitium ha
 |---|---|
 | Network | `<LAN-SUBNET>` |
 | Subnet Mask | `<SUBNET-MASK>` |
-| Default Gateway | `<GATEWAY-IP>` |
+| Default Gateway | `<LAN-GATEWAY-IP>` |
 | DHCP Server | TP-Link Deco M9 Plus |
-| DHCP Pool | `<DHCP-POOL-START>` – `<DHCP-POOL-END>` |
+| DHCP Pool | `<DHCP-POOL-START-IP>` – `<DHCP-POOL-END-IP>` |
 | Primary DNS | `<DEBIAN-SERVICES-LAN-IP>` |
 
 ### DNS Infrastructure
@@ -215,7 +215,7 @@ Technitium DNS Server runs in Docker on the Debian services VM.
 | Proxmox VE | `https://proxmox.home.arpa:8006` |
 | Technitium DNS | `http://dns.home.arpa:5380` |
 | Homepage | `http://<DEBIAN-SERVICES-LAN-IP>:3000` |
-| AMP | `http://<AMP-LAN-IP>:8080` |
+| AMP | `http://<AMP-SERVER-LAN-IP>:8080` |
 
 ### DNS Verification
 
@@ -379,61 +379,41 @@ The following services are potential future additions. They are not considered d
 
 ## Repository Structure
 
+The following tree reflects files currently present in the repository. Planned documentation directories will be added as their corresponding project milestones are completed.
+
 ```text
 OptiPlex-7050-Homelab/
 │
 ├── README.md
 ├── CHANGELOG.md
+├── LICENSE
 │
 ├── 01-hardware/
-│   ├── hardware-inventory.md
-│   ├── upgrade-log.md
 │   ├── bios-configuration.md
+│   ├── hardware-inventory.md
 │   └── storage-health.md
 │
 ├── 02-proxmox/
-│   ├── installation.md
 │   ├── configuration.md
+│   ├── installation.md
 │   └── vm-inventory.md
 │
 ├── 03-networking/
-│   ├── network-overview.md
 │   ├── dns-dhcp.md
-│   ├── ip-address-plan.md
+│   ├── network-overview.md
 │   └── tailscale.md
 │
-├── 04-linux/
-│   ├── linux-administration.md
-│   ├── user-management.md
-│   └── permissions.md
-│
-├── 05-windows-server/
-│   ├── active-directory.md
-│   ├── dns-dhcp.md
-│   └── group-policy.md
-│
 ├── 06-docker/
-│   ├── docker-setup.md
-│   ├── containers.md
-│   └── compose-files.md
+│   └── containers.md
 │
-├── 07-storage/
 ├── 08-backups/
 │   └── backup-strategy.md
 │
-├── 09-applications/
-│   ├── amp.md
-│   ├── minecraft-server.md
-│   └── playit.md
-│
-├── 10-monitoring/
-├── 11-security/
-├── 12-troubleshooting/
-├── 13-network-diagrams/
-└── 14-resume-evidence/
+└── 09-applications/
+    ├── amp.md
+    ├── minecraft-server.md
+    └── playit.md
 ```
-
-Directories and files will be added as their corresponding milestones are completed.
 
 ## Documentation Standards
 
