@@ -94,23 +94,40 @@ This homelab is designed as an educational environment for building and document
 
 ## Project Status
 
-**Current Phase:** Hardware Preparation and Inventory
+**Current Phase: Phase 0 — Hardware Verification Complete**
 
-| Phase | Status |
-|---|---|
-| Project planning and repository setup | Complete |
-| Hardware inventory | Complete |
-| Hardware and BIOS verification | Pending |
-| Proxmox VE installation | Pending |
-| Virtual machine deployment | Pending |
-| Networking and infrastructure services | Pending |
-| Linux and Windows Server administration | Pending |
-| Docker and application deployment | Pending |
-| Storage and backup configuration | Pending |
-| Monitoring and security | Pending |
-| Documentation and portfolio development | In Progress |
+The Dell OptiPlex 7050 SFF has been inspected and its primary hardware specifications have been verified.
 
-For detailed progress, see [CHANGELOG.md](CHANGELOG.md).
+### Completed
+
+- [x] GitHub repository created
+- [x] Initial project documentation established
+- [x] Hardware inventory documented
+- [x] Intel Core i7-7700 CPU verified
+- [x] 32 GB DDR4 RAM configuration verified
+- [x] KingFast 1 TB SATA SSD identified
+- [x] Gigabit Ethernet adapter verified
+- [x] BIOS version documented
+- [x] Intel VT-x enabled
+- [x] Intel VT-d enabled
+- [x] SLAT support confirmed
+
+### In Progress / Upcoming
+
+- [ ] Detailed SSD SMART assessment
+- [ ] Prepare Proxmox VE installation USB
+- [ ] Install Proxmox VE
+- [ ] Configure Proxmox networking
+- [ ] Deploy virtual machines and containers
+- [ ] Configure network services
+- [ ] Deploy Docker applications
+- [ ] Configure storage and backups
+- [ ] Deploy monitoring tools
+- [ ] Implement security hardening
+
+The project is currently transitioning from hardware verification to Proxmox VE installation preparation.
+
+**Note:** Planned services and technologies are not considered deployed until installation, configuration, and testing are complete.
 
 ## Documentation
 
