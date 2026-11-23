@@ -1,63 +1,32 @@
+
 # Changelog
 
-All notable changes to this homelab project are documented in this file.
+All notable changes to this homelab project are documented here.
 
-## [Unreleased]
+## 2026-11-22 — Proxmox VE Installation
 
 ### Added
-- Initial homelab project documentation.
-- Hardware inventory for the Dell OptiPlex 7050 SFF.
-- Verified CPU, RAM, storage, and network specifications.
-- BIOS configuration documentation.
-- Storage health and configuration documentation.
-- Project roadmap and milestone tracking.
+- Completed hardware inventory for the Dell OptiPlex 7050 SFF.
+- Verified CPU virtualization support and BIOS configuration.
+- Installed Proxmox VE directly on the 1 TB SATA SSD.
+- Configured the Proxmox management interface.
+- Documented the initial storage configuration.
+- Verified connectivity to the local gateway and the internet.
+- Added initial Proxmox installation and configuration documentation.
 
-### Verified
-- Intel Core i7-7700 processor with 4 cores and 8 threads.
-- 32 GB DDR4 RAM configured as 2 × 16 GB at 2667 MHz.
-- KingFast 1 TB SATA SSD detected by Windows.
-- Intel I219-LM Gigabit Ethernet adapter.
-- Dell BIOS version 1.27.0.
-- Intel VT-x enabled.
-- Intel VT-d enabled.
-- SLAT support confirmed.
-- Windows-reported SSD health status: Healthy.
-- Created bootable Proxmox VE installation USB using Rufus.
+### Infrastructure
+- Proxmox hostname: `pve`
+- Management IP: `192.168.68.200/24`
+- Gateway: `192.168.68.1`
+- DNS server: `192.168.68.1`
+- Filesystem: ext4
+- Storage: local and local-lvm
 
-### Planned
-- Perform a detailed SSD SMART assessment.
-- Configure Proxmox network settings.
-- Install Proxmox VE.
-- Configure Proxmox networking.
-- Deploy Linux and Windows Server virtual machines.
-- Configure Docker and Docker Compose.
-- Deploy network services and self-hosted applications.
-- Configure storage and backup solutions.
-- Implement monitoring and security hardening.
+### Verification
+- Successfully accessed the Proxmox web interface.
+- Confirmed the host can reach the local gateway.
+- Confirmed DNS resolution and internet connectivity.
 
-## Project Milestones
-
-| Milestone | Status |
-|---|---|
-| GitHub repository created | Complete |
-| Initial project documentation | Complete |
-| Hardware inventory | Complete |
-| Hardware verification | Complete |
-| BIOS virtualization configuration | Complete |
-| Proxmox installation USB created | Complete |
-| Detailed SSD health assessment | Pending |
-| Proxmox network planning | Pending |
-| Proxmox VE installation | Pending |
-| Virtual machine deployment | Pending |
-| Network services | Pending |
-| Docker deployment | Pending |
-| Windows Server deployment | Pending |
-| Storage and backup configuration | Pending |
-| Application deployment | Pending |
-| Monitoring and security | Pending |
-
-## Documentation Policy
-
-Only completed and verified work should be recorded as completed.
-
-Planned features and services should remain under the Unreleased section until they have been implemented and tested.
+### Notes
+- Future services and virtual machines are planned but have not yet been deployed.
+- No passwords, credentials, or hardware MAC addresses are included in this repository.

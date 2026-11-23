@@ -1,167 +1,79 @@
-# Dell OptiPlex 7050 Homelab
 
-A self-hosted homelab project built using a Dell OptiPlex 7050 Small Form Factor (SFF). The goal is to gain practical experience with IT infrastructure, virtualization, networking, Linux and Windows Server administration, containerization, storage, security, and self-hosted applications.
+# OptiPlex 7050 Homelab
 
-This project also serves as a technical portfolio documenting hands-on learning, configurations, troubleshooting, and implementation progress.
+A self-hosted homelab built using a Dell OptiPlex 7050 Small Form Factor. This project documents the deployment and administration of a Proxmox VE environment, Linux and Windows virtual machines, networking, containerization, storage, security, and monitoring.
 
-## Hardware Specifications
+The goal is to develop practical IT infrastructure, troubleshooting, networking, and systems administration skills through hands-on projects.
+
+## Hardware
 
 | Component | Specification |
 |---|---|
-| Manufacturer | Dell |
-| Model | OptiPlex 7050 |
-| Form Factor | Small Form Factor (SFF) |
+| System | Dell OptiPlex 7050 SFF |
 | CPU | Intel Core i7-7700 |
-| CPU Cores / Threads | 4 Cores / 8 Threads |
-| CPU Base Frequency | 3.60 GHz |
-| RAM | 32 GB DDR4 |
-| RAM Configuration | 2 × 16 GB |
-| RAM Speed | 2667 MHz |
-| Storage | KingFast 1 TB SATA SSD |
-| Reported SSD Capacity | 953.87 GB |
+| CPU Configuration | 4 cores / 8 threads |
+| Memory | 32 GB DDR4 (2 x 16 GB) |
+| Memory Speed | 2667 MHz |
+| Primary Storage | 1 TB KingFast SATA SSD |
+| Network | Intel I219-LM Gigabit Ethernet |
 | Graphics | Intel HD Graphics 630 |
-| Network Adapter | Intel Ethernet Connection (5) I219-LM |
-| Network Speed | 1 Gbps |
-| BIOS | Dell 1.27.0 |
 
-### Virtualization Support
+See [Hardware Inventory](01-hardware/hardware-inventory.md) for details.
 
-| Feature | Status |
-|---|---|
-| Intel VT-x | Enabled |
-| Intel VT-d | Enabled |
-| SLAT | Supported |
+## Hypervisor
 
-## Project Goals
+- Proxmox Virtual Environment
+- Bare-metal installation
+- ext4 filesystem with LVM-thin storage
+- Management address: `192.168.68.200`
+- Hostname: `pve`
 
-- Learn and implement bare-metal virtualization using Proxmox VE.
-- Deploy and manage Linux and Windows Server virtual machines.
-- Develop practical networking and infrastructure administration skills.
-- Configure DNS, DHCP, and remote access services.
-- Learn Docker and Docker Compose.
-- Build self-hosted applications and services.
-- Implement storage, backup, and recovery solutions.
-- Configure system monitoring and dashboards.
-- Practice security hardening and troubleshooting.
-- Document technical work for professional portfolio development.
-
-## Planned Technologies
-
-### Virtualization
-- Proxmox VE
-- Linux Virtual Machines
-- Windows Server Virtual Machines
-
-### Networking
-- DNS
-- DHCP
-- Pi-hole or AdGuard
-- Tailscale
-- Internal DNS
-
-### System Administration
-- Linux Administration
-- Windows Server
-- Active Directory
-- Group Policy
-- User and Permission Management
-
-### Containers and Applications
-- Docker
-- Docker Compose
-- Immich
-- Jellyfin or Plex
-- Nextcloud
-- Syncthing
-- AMP
-- Minecraft Server
-- Playit.gg
-
-### Storage and Backups
-- Proxmox Backup Server
-- Network File Sharing
-- SMB
-- Storage Management
-- Backup and Restore Testing
-
-### Monitoring and Dashboards
-- Uptime Kuma
-- Beszel
-- Homepage, Homarr, or Heimdall
+See the [Proxmox installation documentation](02-proxmox/installation.md).
 
 ## Project Roadmap
 
-| Phase | Description | Status |
+| Phase | Area | Status |
 |---|---|---|
-| 0 | Hardware Preparation and Verification | Complete |
-| 1 | Proxmox VE Installation | In Progress |
-| 2 | Networking and Network Services | Planned |
-| 3 | Linux Administration and Docker | Planned |
+| 0 | Hardware preparation and inventory | Complete |
+| 1 | Proxmox VE installation | Complete |
+| 2 | Networking infrastructure | In Progress |
+| 3 | Linux administration and Docker | Planned |
 | 4 | Windows Server and Active Directory | Planned |
-| 5 | Storage, NAS, and Backups | Planned |
-| 6 | Media and Game Server Applications | Planned |
-| 7 | Monitoring and Dashboards | Planned |
-| 8 | Security Hardening | Planned |
-| 9 | Troubleshooting and Incident Documentation | Planned |
-| 10 | Portfolio Documentation and Improvements | Planned |
+| 5 | Storage and backups | Planned |
+| 6 | Media and game servers | Planned |
+| 7 | Monitoring and dashboards | Planned |
+| 8 | Security hardening | Planned |
+| 9 | Troubleshooting documentation | Planned |
+| 10 | Portfolio development | Planned |
 
-## Project Status
+## Planned Services
 
-**Current Phase: Phase 1 — Proxmox VE Installation Preparation**
+The following services are planned for future deployment. They are not yet configured unless explicitly documented elsewhere.
 
-### Completed
-
-- [x] GitHub repository created
-- [x] Initial project documentation established
-- [x] Hardware inventory documented
-- [x] Intel Core i7-7700 CPU verified
-- [x] 32 GB DDR4 RAM configuration verified
-- [x] KingFast 1 TB SATA SSD identified
-- [x] Gigabit Ethernet adapter verified
-- [x] BIOS version documented
-- [x] Intel VT-x enabled
-- [x] Intel VT-d enabled
-- [x] SLAT support confirmed
-- [x] Proxmox VE installation USB created using Rufus
-
-### Upcoming
-
-- [ ] Detailed SSD SMART assessment
-- [ ] Proxmox network configuration planning
-- [ ] Proxmox VE installation
-- [ ] Configure Proxmox networking
-- [ ] Deploy virtual machines and containers
-- [ ] Configure network services
-- [ ] Deploy Docker applications
-- [ ] Configure storage and backups
-- [ ] Deploy monitoring tools
-- [ ] Implement security hardening
+- Pi-hole or AdGuard Home
+- Tailscale
+- Docker and Docker Compose
+- Linux virtual machines
+- Windows Server and Active Directory
+- Immich
+- Jellyfin
+- Minecraft server
+- Nextcloud
+- Syncthing
+- Proxmox Backup Server
+- Uptime Kuma
+- Beszel
+- Homepage or Homarr
 
 ## Repository Structure
 
 ```text
-optiplex-7050-homelab/
-│
+OptiPlex-7050-Homelab/
 ├── README.md
 ├── CHANGELOG.md
-│
 ├── 01-hardware/
-│   ├── hardware-inventory.md
-│   ├── upgrade-log.md
-│   ├── bios-configuration.md
-│   └── storage-health.md
-│
 ├── 02-proxmox/
-│   ├── installation.md
-│   ├── configuration.md
-│   └── vm-inventory.md
-│
 ├── 03-networking/
-│   ├── network-overview.md
-│   ├── ip-address-plan.md
-│   ├── dns-dhcp.md
-│   └── tailscale.md
-│
 ├── 04-linux/
 ├── 05-windows-server/
 ├── 06-docker/
@@ -175,28 +87,19 @@ optiplex-7050-homelab/
 └── 14-resume-evidence/
 ```
 
+## Learning Objectives
+
+- Deploy and manage a bare-metal hypervisor.
+- Configure virtual machines and virtual networking.
+- Administer Linux and Windows environments.
+- Practice DNS, DHCP, and network troubleshooting.
+- Deploy and manage containerized applications.
+- Implement storage, backup, and recovery procedures.
+- Monitor infrastructure and troubleshoot service failures.
+- Document technical work and operational procedures.
+
 ## Documentation
 
-- [Hardware Inventory](01-hardware/hardware-inventory.md)
-- [BIOS Configuration](01-hardware/bios-configuration.md)
-- [Storage Health](01-hardware/storage-health.md)
-- [Changelog](CHANGELOG.md)
+Each section of this repository records configurations, procedures, testing results, and lessons learned as the homelab develops.
 
-## Learning Outcomes
-
-This project is intended to develop practical experience in:
-
-- Hardware identification and troubleshooting
-- Hypervisor installation and management
-- Virtual machine provisioning
-- Network configuration and troubleshooting
-- Linux and Windows Server administration
-- Active Directory and Group Policy
-- Container management
-- Storage and backup administration
-- Security configuration
-- Monitoring and incident troubleshooting
-
-## Disclaimer
-
-This repository documents a personal homelab and independent learning project. Technologies listed as planned are not necessarily installed or operational. Implementation status will be updated as each service is configured and tested.
+Sensitive information such as passwords, API keys, tokens, serial numbers, and private credentials will not be published.
