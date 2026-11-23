@@ -1,136 +1,201 @@
-# CubeCoders AMP Deployment
+
+# CubeCoders AMP — Game Server Management
 
 ## Overview
 
-CubeCoders AMP (Application Management Panel) is deployed in a dedicated Debian 13 virtual machine on Proxmox VE.
+CubeCoders AMP (Application Management Panel) is used to manage and operate the homelab's Minecraft server.
 
-AMP provides a web-based interface for creating, managing, and monitoring game-server instances.
+AMP runs inside a dedicated Debian virtual machine on Proxmox VE. It provides a web-based interface for managing game server instances, configuring resources, monitoring server activity, and controlling server processes.
 
-The deployment is intended to support Minecraft and other game servers while keeping game-server workloads separate from the homelab's Docker and DNS services.
+The Linggango modded Minecraft server runs as an AMP-managed instance.
 
-## Virtual Machine
-
-AMP runs on Proxmox VM 101.
+## Deployment Environment
 
 | Property | Configuration |
 |---|---|
+| Platform | Proxmox VE |
 | VM ID | 101 |
-| Hostname | `amp-server` |
+| VM Hostname | `amp-server` |
 | Operating System | Debian 13 |
-| Architecture | AMD64 |
 | vCPU | 4 |
-| CPU Type | Host |
 | Memory | 12 GB |
 | Virtual Disk | 100 GB |
 | Network Adapter | VirtIO |
-| IP Address | `192.168.68.104` |
-| Default Gateway | `192.168.68.1` |
+| Management Software | CubeCoders AMP |
+| AMP Version | 2.8.0.10 |
 
 ## AMP Installation
 
-AMP was installed using the official CubeCoders installation script.
+AMP was installed on the Debian 13 virtual machine using the CubeCoders installer.
 
-The installation was performed from a root shell on the Debian VM.
-
-```bash
-sudo -i
-bash <(curl -fsSL getamp.sh)
-```
-
-The installer detected Debian 13 and installed AMP Instance Manager.
-
-### Installation Options
-
-| Option | Configuration |
-|---|---|
-| Instance Manager | Installed |
-| Management Instance | `ADS01` |
-| Management Port | 8080 |
-| Podman | Installed |
-| Java runtimes | Installed |
-| SteamCMD 32-bit libraries | Installed |
-| HTTPS / Nginx | Not enabled |
-| Firewall package | Not detected by installer |
-
-HTTPS/Nginx was not enabled because the environment is currently intended for LAN access and does not use a public domain for AMP.
-
-No router port forwarding was configured for AMP.
-
-## AMP Configuration
-
-### Operation Mode
-
-AMP is configured in **Standalone** mode.
-
-This mode is suitable for the current single-host deployment and allows the Instance Manager to manage local game-server instances.
-
-### Privacy Settings
-
-| Setting | Configuration |
-|---|---|
-| Anonymous crash reports | Enabled |
-| Anonymous usage data | Disabled |
-| Enhanced licence reporting | Disabled |
-
-### Management Interface
-
-AMP web interface:
-
-`http://192.168.68.104:8080`
-
-The AMP administrative username and password are intentionally excluded from this repository.
-
-## Installed Components
-
-The installation includes:
+The installation configured:
 
 - AMP Instance Manager
-- Podman support for instance isolation
-- Java runtimes for Java-based game servers
-- SteamCMD 32-bit libraries for future game-server support
+- Standalone deployment
+- Podman support
+- Java runtime support
+- SteamCMD dependencies
+- AMP management services
 
-The Minecraft instance uses Eclipse Temurin 17.
+The AMP installation includes the management instance `ADS01`.
 
-## Current Instances
+## Management Access
 
-| Instance | Application | Status |
-|---|---|---|
-| Minecraft | Linggango modded Minecraft server | Running |
+The AMP management interface is available through the local network:
 
-Additional game-server instances may be created through AMP as resources permit.
+```text
+http://AMP-LAN-IP:8080
+```
 
-## Operational Notes
+The AMP VM also has private Tailscale connectivity for remote administration.
 
-- Use the AMP web interface to manage instances and monitor their consoles.
-- Use SSH for Debian system administration.
-- Keep game-server files inside their assigned AMP instance directories.
-- Do not manually run server startup scripts when AMP is managing the instance.
-- Monitor CPU, memory, and disk utilization.
-- Keep administrative interfaces restricted to trusted network access.
+AMP management is not published through Playit.gg.
 
-## Installation Notes and Warnings
+Administrative access should remain restricted to trusted devices on the LAN or private Tailscale network.
 
-During installation, the AMPThemes Git repository fetch reported an error while downloading theme files.
+## Instance Configuration
 
-The AMP Instance Manager nevertheless completed installation, created the `ADS01` management instance, and became accessible through its web interface.
+### Linggango01
 
-The theme repository warning has not yet been separately investigated.
+The Minecraft server is managed through an AMP instance named `Linggango01`.
 
-The installer also reported that no firewall package was detected. Proxmox VM firewall functionality is enabled for VM 101, but custom firewall rules have not been documented as verified.
+| Property | Configuration |
+|---|---|
+| AMP Instance | `Linggango01` |
+| Application | Minecraft Java Edition |
+| Server Type | Forge |
+| Minecraft Version | 1.20.1 |
+| Forge Version | 47.4.20 |
+| Java Runtime | Eclipse Temurin 17 |
+| Minecraft Port | 25565/TCP |
+| Maximum Players | 5 |
+
+The Minecraft server files are stored under:
+
+```text
+/home/amp/.ampdata/instances/Linggango01/Minecraft/
+```
+
+The instance uses the extracted Linggango server pack.
+
+See `minecraft-server.md` for the complete server configuration.
+
+## Resource Allocation
+
+The AMP VM has 4 virtual CPUs and 12 GB of RAM.
+
+The Minecraft instance is configured with:
+
+| Setting | Value |
+|---|---:|
+| AMP Memory Limit | 8192 MB |
+| Memory Pre-allocation | 6144 MB |
+
+These settings reserve resources for the Minecraft process while leaving memory available for Debian and AMP.
+
+Resource usage should be monitored during multiplayer sessions and adjusted as necessary.
+
+## Remote Access Architecture
+
+Two separate services provide connectivity to the homelab:
+
+### Tailscale — Private Administration
+
+Tailscale provides private remote access to the AMP VM.
+
+The AMP management interface can be reached through its Tailscale IP and management port.
+
+This access is intended for administration by trusted devices.
+
+### Playit.gg — Public Minecraft Connectivity
+
+Playit.gg provides public connectivity to the Minecraft server.
+
+The Playit agent runs on the AMP VM and forwards connections to:
+
+```text
+127.0.0.1:25565
+```
+
+The public tunnel is dedicated to Minecraft Java connectivity.
+
+AMP management, SSH, and other administrative services are not exposed through the Playit tunnel.
+
+The actual public hostname is intentionally excluded from this repository.
+
+See:
+
+- `../03-networking/tailscale.md`
+- `playit.md`
+- `minecraft-server.md`
+
+## Backup Configuration
+
+AMP's backup functionality has been configured for the Minecraft instance.
+
+Current retention settings:
+
+| Setting | Value |
+|---|---|
+| Schedule | Hourly |
+| Retention Count | 24 |
+| Backup Storage | `./Backups/` |
+| Compression | Optimal |
+| Replacement Policy | Delete Single Oldest |
+
+The backup configuration has been established, but successful scheduled backups and restoration have not yet been verified.
+
+See `../08-backups/backup-strategy.md`.
+
+## Verification
+
+The following functionality has been verified:
+
+- AMP installed successfully on Debian 13.
+- AMP management instance running.
+- Minecraft instance created through AMP.
+- Linggango server pack extracted into the instance directory.
+- Minecraft server successfully started.
+- Minecraft process listening on TCP port 25565.
+- AMP reachable over the local network.
+- AMP reachable over Tailscale.
+- Playit agent connected successfully.
+- Public Minecraft connectivity tested from outside the home network.
 
 ## Security Considerations
 
-- AMP is currently accessed through the local network.
-- No public router port forwarding has been configured.
-- HTTPS/Nginx was not enabled.
-- Administrative credentials are not stored in this repository.
-- Remote access through Tailscale is a future project.
+- Keep AMP management access private.
+- Use Tailscale for remote administration.
+- Use Playit.gg only for public Minecraft connectivity.
+- Do not expose the AMP management port through public tunnels.
+- Do not expose SSH or Proxmox management interfaces publicly.
+- Keep AMP credentials and Playit agent secrets out of Git.
+- Use strong authentication for administrative accounts.
+- Keep Debian and AMP components updated.
+
+## Maintenance
+
+Check the AMP management service and instance status through the AMP interface.
+
+Check the Playit agent:
+
+```bash
+sudo systemctl status playit --no-pager
+```
+
+Check Tailscale connectivity:
+
+```bash
+tailscale status
+```
+
+Monitor CPU and memory usage through AMP or Debian system utilities.
 
 ## Future Improvements
 
-- Verify firewall rules and restrict management access.
-- Configure and test automatic backups.
-- Establish independent backup storage.
-- Add additional AMP-managed game servers if resources permit.
-- Document resource utilization and performance.
-- Configure secure remote access.
+- Verify automatic backup creation.
+- Perform a backup restoration test.
+- Monitor server resource consumption.
+- Review AMP instance update procedures.
+- Document recovery procedures.
+- Evaluate independent backup storage.

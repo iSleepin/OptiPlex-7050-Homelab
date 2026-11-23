@@ -1,6 +1,48 @@
+
 # Changelog
 
 All notable changes to the OptiPlex 7050 Homelab project are documented here.
+
+## [2026-11-23] - Remote Access Milestone
+
+### Added
+
+- Added `03-networking/tailscale.md` documenting private remote administration.
+- Added `09-applications/playit.md` documenting public Minecraft connectivity.
+- Documented Tailscale Serve for private HTTPS access to Technitium DNS.
+- Documented the Playit.gg Minecraft Java tunnel.
+- Updated `09-applications/minecraft-server.md` with public remote access configuration.
+- Updated `09-applications/amp.md` with private administration and remote-access architecture.
+- Updated the project README with the remote-access infrastructure.
+
+### Remote Access Infrastructure
+
+- Installed and connected Tailscale on the Proxmox host.
+- Installed and connected Tailscale on Debian services VM 100.
+- Installed and connected Tailscale on AMP VM 101.
+- Connected the Windows administration computer to the same tailnet.
+- Verified remote TCP connectivity to the Proxmox web interface on port 8006.
+- Verified remote TCP connectivity to AMP on port 8080.
+- Configured Tailscale Serve to provide private HTTPS access to Technitium DNS.
+- Verified Tailscale Serve connectivity over TCP port 443.
+
+### Public Minecraft Connectivity
+
+- Installed the Playit.gg agent on the AMP VM.
+- Registered and connected the agent as `amp-server-minecraft`.
+- Created a Minecraft Java tunnel named `Linggango-Minecraft-Java`.
+- Configured the tunnel to forward connections to `127.0.0.1:25565`.
+- Verified the Minecraft tunnel was operational.
+- Successfully tested public Minecraft connectivity from outside the home network.
+- Confirmed that router port forwarding was not required.
+
+### Security
+
+- Separated private administrative access from public Minecraft connectivity.
+- Kept Proxmox, AMP, and Technitium administration outside the public Playit tunnel.
+- Kept Tailscale Funnel disabled.
+- Excluded actual public hostnames, private Tailscale addresses, and authentication secrets from repository documentation.
+- Documented the use of Tailscale for private administration and Playit.gg exclusively for public Minecraft access.
 
 ## [2026-11-23] - AMP and Minecraft Server Milestone
 

@@ -1,3 +1,4 @@
+
 # OptiPlex 7050 Homelab
 
 A personal homelab project built around a Dell OptiPlex 7050 SFF running Proxmox VE. The goal is to develop practical IT infrastructure, Linux administration, networking, virtualization, Docker, and systems administration skills through hands-on projects.
@@ -47,6 +48,8 @@ The OptiPlex 7050 SFF provides a compact platform for learning virtualization an
 | Game Server Management | CubeCoders AMP |
 | Game Server | Minecraft Java Edition |
 | Minecraft Mod Loader | Minecraft Forge |
+| Private Remote Access | Tailscale |
+| Public Game Server Access | Playit.gg |
 | Router / DHCP | TP-Link Deco M9 Plus |
 | Internal DNS Domain | `home.arpa` |
 
@@ -84,7 +87,7 @@ VM 100 hosts Docker and network services.
 | Memory | 4 GB |
 | Virtual Disk | 32 GB |
 | IP Address | `192.168.68.108` |
-| Administration | SSH |
+| Administration | SSH and Tailscale |
 
 ### Docker Environment
 
@@ -139,15 +142,18 @@ A modded Minecraft Java server is managed through AMP.
 | Java Runtime | Eclipse Temurin 17 |
 | AMP Instance Management | AMP |
 | Server VM | VM 101 |
-| Server Address | `192.168.68.104` |
+| Local Server Address | `192.168.68.104:25565` |
+| Public Connectivity | Playit.gg |
 
 The server pack was transferred and extracted into the AMP instance directory. The server was successfully started through AMP.
+
+Public connectivity was verified from outside the home network using Playit.gg without configuring router port forwarding.
 
 See [`09-applications/minecraft-server.md`](09-applications/minecraft-server.md).
 
 ## Networking and DNS
 
-**Status: Core DNS configuration completed**
+**Status: Core DNS configuration and remote access completed**
 
 The TP-Link Deco M9 Plus remains responsible for routing and DHCP. Technitium handles DNS resolution for network clients.
 
@@ -200,6 +206,72 @@ The following tests have been completed successfully:
 - Internal DNS resolution for Technitium.
 - Browser access using internal DNS hostnames.
 
+## Remote Access
+
+The homelab uses separate services for private administration and public application access.
+
+### Tailscale — Private Remote Administration
+
+Tailscale provides private remote connectivity between the following devices:
+
+- Proxmox host (`pve`)
+- Debian services VM (`debian-services`)
+- AMP VM (`amp-server`)
+- Windows administration computer
+
+Tailscale is used to access administrative services without exposing management interfaces directly to the public internet.
+
+Verified remote connectivity includes:
+
+| Service | Port | Access |
+|---|---:|---|
+| Proxmox VE | 8006 | Tailscale |
+| AMP management | 8080 | Tailscale |
+| Technitium DNS | 443 | Tailscale Serve |
+
+### Tailscale Serve
+
+Tailscale Serve provides private HTTPS access to the Technitium DNS web interface.
+
+The service proxies requests to the local Technitium web interface on the Debian services VM.
+
+The HTTPS endpoint is accessible only within the tailnet. Tailscale Funnel is not enabled.
+
+Actual Tailscale IP addresses and the private MagicDNS hostname are intentionally excluded from this public repository.
+
+### Playit.gg — Public Minecraft Connectivity
+
+Playit.gg provides public connectivity to the Linggango Minecraft server.
+
+The Playit agent runs on the AMP VM and forwards incoming Minecraft connections to the local server at:
+
+```text
+127.0.0.1:25565
+```
+
+| Setting | Configuration |
+|---|---|
+| Agent | `amp-server-minecraft` |
+| Tunnel | `Linggango-Minecraft-Java` |
+| Tunnel Type | Minecraft Java |
+| Local Destination | `127.0.0.1:25565` |
+| Public Hostname | `your-server.example.com` |
+
+The public hostname is a fictional placeholder and is not the actual assigned address.
+
+Public connectivity was tested successfully from outside the home network.
+
+### Network Security
+
+- Tailscale is used for private administrative access.
+- Playit.gg is used exclusively for public Minecraft connectivity.
+- AMP and Proxmox management interfaces are not exposed through Playit.
+- Technitium administration remains private through LAN and Tailscale access.
+- No router port forwarding is configured for these services.
+- Public hostnames, authentication tokens, and agent secrets are excluded from repository documentation.
+
+See [`03-networking/tailscale.md`](03-networking/tailscale.md) and [`09-applications/playit.md`](09-applications/playit.md).
+
 ## Backup Infrastructure
 
 AMP's local Minecraft backup retention settings have been configured.
@@ -237,9 +309,9 @@ The following services are potential future additions. They are not considered d
 
 ### Networking and Remote Access
 
-- Tailscale
 - Additional internal DNS records
 - Network segmentation and firewall configuration
+- Additional remote access controls and security hardening
 
 ### Linux and Containers
 
@@ -325,9 +397,12 @@ OptiPlex-7050-Homelab/
 ├── 07-storage/
 ├── 08-backups/
 │   └── backup-strategy.md
+│
 ├── 09-applications/
 │   ├── amp.md
-│   └── minecraft-server.md
+│   ├── minecraft-server.md
+│   └── playit.md
+│
 ├── 10-monitoring/
 ├── 11-security/
 ├── 12-troubleshooting/
@@ -346,6 +421,7 @@ This repository is intended to be an accurate technical record of the homelab.
 - Record troubleshooting steps and lessons learned.
 - Keep credentials, passwords, API tokens, MAC addresses, and device serial numbers out of public documentation.
 - Do not publish public IP addresses or private authentication details.
+- Avoid publishing private Tailscale addresses and actual public tunnel hostnames.
 - Update the changelog when meaningful milestones are completed.
 - Document significant configuration changes and infrastructure decisions.
 
@@ -363,6 +439,9 @@ This project provides practical experience with:
 - DNS and DHCP configuration
 - Network troubleshooting
 - Internal DNS architecture
+- Tailscale private networking
+- Tailscale Serve
+- Public service tunneling with Playit.gg
 - Application and game-server deployment
 - Java runtime management
 - Backup configuration and retention
