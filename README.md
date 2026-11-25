@@ -111,6 +111,7 @@ Docker services are deployed using Docker Compose with persistent configuration 
 | Homepage | `homepage` | Running and verified after reboot |
 | Uptime Kuma | `uptime-kuma` | Running; five monitors configured |
 | Beszel Hub | `beszel` | Running; two systems reporting |
+| Beszel Agent (VM 100) | `beszel-agent` | Running; host metrics reporting |
 
 **Homepage Dashboard**
 
