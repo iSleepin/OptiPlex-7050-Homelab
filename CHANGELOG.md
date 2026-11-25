@@ -7,14 +7,14 @@ All notable changes to the OptiPlex 7050 Homelab project are documented here.
 
 ### Added
 
-- Deployed Uptime Kuma on the Debian services VM using Docker Compose.
-- Configured five Uptime Kuma monitors for Proxmox VE, Homepage, the Technitium web interface, AMP, and the Minecraft Java server.
+- Documented the existing Uptime Kuma deployment on the Debian services VM, managed with Docker Compose.
+- Documented five configured Uptime Kuma monitors for Proxmox VE, Homepage, the Technitium web interface, AMP, and the Minecraft Java server.
 - Created the `homelab` Uptime Kuma status page for service availability reporting.
 - Deployed Beszel Hub on the Debian services VM using Docker Compose.
 - Deployed the Beszel agent on the Debian services VM as a Docker container.
 - Deployed the Beszel agent on the AMP VM as a standalone Linux binary managed by systemd.
 - Integrated Beszel overview and per-system widgets into Homepage for both Debian VMs.
-- Integrated the Uptime Kuma status widget into Homepage.
+- Documented the existing Uptime Kuma status widget in Homepage.
 - Added `07-monitoring/monitoring.md` documenting the monitoring architecture, deployment, and verification.
 
 ### Verification
