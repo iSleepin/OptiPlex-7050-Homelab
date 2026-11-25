@@ -3,6 +3,37 @@
 
 All notable changes to the OptiPlex 7050 Homelab project are documented here.
 
+## [2026-11-25] - Monitoring and Observability Milestone
+
+### Added
+
+- Deployed Uptime Kuma on the Debian services VM using Docker Compose.
+- Configured five Uptime Kuma monitors for Proxmox VE, Homepage, the Technitium web interface, AMP, and the Minecraft Java server.
+- Created the `homelab` Uptime Kuma status page for service availability reporting.
+- Deployed Beszel Hub on the Debian services VM using Docker Compose.
+- Deployed the Beszel agent on the Debian services VM as a Docker container.
+- Deployed the Beszel agent on the AMP VM as a standalone Linux binary managed by systemd.
+- Integrated Beszel overview and per-system widgets into Homepage for both Debian VMs.
+- Integrated the Uptime Kuma status widget into Homepage.
+- Added `07-monitoring/monitoring.md` documenting the monitoring architecture, deployment, and verification.
+
+### Verification
+
+- Confirmed all five Uptime Kuma monitors reported Up during verification.
+- Confirmed Beszel reported both Debian VMs online and collected CPU, memory, disk, average load, network, and uptime metrics.
+- Confirmed Homepage displayed the Beszel overview and live metrics for `debian-services` and `amp-server`.
+- Rebooted the AMP VM and verified that its Beszel systemd service started automatically.
+- Verified the AMP VM agent re-established its WebSocket connection to Beszel after network connectivity became available during boot.
+- Stored Homepage's Beszel API credentials in the local protected environment file; credential values were not added to repository documentation.
+
+### Documentation
+
+- Updated the README to reflect the completed monitoring phase and Homepage integrations.
+- Updated the Docker inventory with Uptime Kuma and Beszel Hub.
+- Updated the network overview to show the monitoring services and agents on their respective VMs.
+- Kept private LAN addresses, API credentials, tokens, and other secrets out of the public documentation.
+
+
 ## [2026-11-23] - Public Documentation Security and Accuracy Review
 
 ### Security and Documentation
