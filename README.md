@@ -47,6 +47,7 @@ The OptiPlex 7050 SFF provides a compact platform for learning virtualization an
 | Container Management | Docker Compose |
 | DNS Server | Technitium DNS Server |
 | Dashboard | Homepage |
+| Monitoring | Uptime Kuma and Beszel |
 | Game Server Management | CubeCoders AMP |
 | Game Server | Minecraft Java Edition |
 | Minecraft Mod Loader | Minecraft Forge |
@@ -108,10 +109,13 @@ Docker services are deployed using Docker Compose with persistent configuration 
 |---|---|---|
 | Technitium DNS Server | `technitium` | Running and verified after reboot |
 | Homepage | `homepage` | Running and verified after reboot |
+| Uptime Kuma | `uptime-kuma` | Running; five monitors configured |
+| Beszel Hub | `beszel` | Running; two systems reporting |
+| Beszel Agent (VM 100) | `beszel-agent` | Running; host metrics reporting |
 
 **Homepage Dashboard**
 
-Homepage provides a centralized dashboard with shortcuts to the homelab's management interfaces and applications.
+Homepage provides a centralized dashboard with shortcuts to the homelab's management interfaces and applications. It also displays live Proxmox, Uptime Kuma, and Beszel information, including an overview of monitored systems and resource metrics for both Debian VMs.
 
 - Access: `http://<DEBIAN-SERVICES-LAN-IP>:3000`
 - Configuration directory: `/opt/homepage/config/`
@@ -172,6 +176,18 @@ The server pack was transferred and extracted into the AMP instance directory. T
 Public connectivity was verified from outside the home network using Playit.gg without configuring router port forwarding.
 
 See [`09-applications/minecraft-server.md`](09-applications/minecraft-server.md).
+
+## Monitoring and Observability
+
+The homelab uses Uptime Kuma for service availability checks and Beszel for host-level resource monitoring. Both monitoring services run on the Debian services VM.
+
+- **Uptime Kuma:** monitors Proxmox VE, Homepage, Technitium's web interface, AMP, and the Minecraft Java server. Its status page summarizes service availability.
+- **Beszel:** monitors both Debian VMs for CPU, memory, disk, average load, network activity, and uptime.
+- **Homepage:** integrates Uptime Kuma and Beszel widgets alongside the existing infrastructure shortcuts and Proxmox widget.
+
+Beszel Hub and the Debian services VM agent run in Docker. The AMP VM uses the standalone Beszel agent managed by systemd. The AMP VM agent was verified to start automatically and reconnect to the Hub after a VM reboot.
+
+See [`07-monitoring/monitoring.md`](07-monitoring/monitoring.md) for deployment details, monitored checks, integration, and verification.
 
 ## Networking and DNS
 
@@ -321,7 +337,7 @@ See [`08-backups/backup-strategy.md`](08-backups/backup-strategy.md).
 | 4 | Windows Server and Active Directory | Planned |
 | 5 | Storage, NAS, and backup infrastructure | In Progress |
 | 6 | Media and game server applications | In Progress |
-| 7 | Monitoring and dashboards | Planned (Homepage shortcuts deployed; live metrics not deployed) |
+| 7 | Monitoring and dashboards | Complete (Uptime Kuma, Beszel, and Homepage live widgets verified) |
 | 8 | Security hardening | Planned |
 | 9 | Troubleshooting and incident documentation | Ongoing |
 | 10 | Portfolio documentation and project polish | Ongoing |
@@ -366,9 +382,8 @@ The following services are potential future additions. They are not considered d
 
 ### Monitoring
 
-- Uptime Kuma
-- Beszel
-- Live service and infrastructure metrics
+- Additional alerting integrations and notification channels
+- Expanded host and application monitoring as services are added
 
 ### Security
 
@@ -405,6 +420,9 @@ OptiPlex-7050-Homelab/
 │
 ├── 06-docker/
 │   └── containers.md
+│
+├── 07-monitoring/
+│   └── monitoring.md
 │
 ├── 08-backups/
 │   └── backup-strategy.md
@@ -449,6 +467,10 @@ This project provides practical experience with:
 - Application and game-server deployment
 - Java runtime management
 - Backup configuration and retention
+- Service availability monitoring with Uptime Kuma
+- Host resource monitoring with Beszel
+- Systemd service management and reboot-persistence verification
+- Dashboard API integration and environment-based secret handling
 - Technical documentation and change management
 
 ## Disclaimer

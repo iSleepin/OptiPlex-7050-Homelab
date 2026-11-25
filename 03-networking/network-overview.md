@@ -92,6 +92,8 @@ Services hosted on VM 100:
 
 - Technitium DNS Server (TCP/UDP 53 and web administration TCP 5380)
 - Homepage dashboard (TCP 3000)
+- Uptime Kuma service monitoring (TCP 3001)
+- Beszel Hub and Docker-based Beszel agent (TCP 8090 for the Hub; agent metrics collection)
 - Tailscale Serve for private HTTPS access to Technitium
 
 ### AMP Virtual Machine
@@ -108,6 +110,7 @@ Services hosted on VM 101:
 - CubeCoders AMP management (TCP 8080)
 - Linggango Minecraft Java server (TCP 25565)
 - Playit agent for public Minecraft connectivity
+- Beszel standalone agent managed by systemd (TCP 45876 for agent collection)
 
 ## Internal Service Naming
 

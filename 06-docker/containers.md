@@ -100,7 +100,7 @@ docker compose up -d
 
 Homepage provides a centralized dashboard with shortcuts to Proxmox VE, Technitium DNS, AMP, and the Minecraft server.
 
-The dashboard currently provides service links rather than live infrastructure metrics.
+The dashboard also displays live Proxmox, Uptime Kuma, and Beszel information, including an overview of monitored systems and resource metrics for both Debian VMs.
 
 #### Deployment Commands
 
@@ -111,6 +111,41 @@ docker compose pull
 docker compose up -d
 docker compose ps
 ```
+
+### Uptime Kuma
+
+| Property | Configuration |
+|---|---|
+| Container Name | `uptime-kuma` |
+| Image | `louislam/uptime-kuma:2` |
+| Restart Policy | `unless-stopped` |
+| Web Interface | TCP 3001 |
+| Deployment Directory | `/opt/uptime-kuma` |
+| Persistent Data | `./data` mounted at `/app/data` |
+
+Uptime Kuma monitors five services: Proxmox VE, Homepage, the Technitium web interface, AMP, and the Minecraft Java server. The Minecraft check uses GameDig with the Minecraft Java Edition protocol.
+
+The Technitium monitor checks its HTTP administration interface; it does not independently validate DNS query resolution. The Proxmox monitor ignores the TLS certificate error because the local Proxmox web interface uses a self-signed certificate.
+
+Homepage displays the Uptime Kuma status-page widget. Detailed monitor configuration is documented in [`07-monitoring/monitoring.md`](../07-monitoring/monitoring.md).
+
+### Beszel Hub and Debian Services Agent
+
+| Property | Configuration |
+|---|---|
+| Hub Container | `beszel` |
+| Image | `henrygd/beszel:latest` |
+| Restart Policy | `unless-stopped` |
+| Web Interface | TCP 8090 |
+| Deployment Directory | `/opt/beszel` |
+| Persistent Data | `./data` mounted at `/beszel_data` |
+| Agent Container on VM 100 | `beszel-agent` |
+| Agent Image | `henrygd/beszel-agent` |
+| Agent Deployment Directory | `/opt/beszel-agent` |
+
+The Beszel agent on VM 100 runs as a Docker container using host networking. It reports host resource metrics to the Beszel Hub. A separate standalone agent runs on VM 101 and is managed by systemd; its configuration is documented in [`07-monitoring/monitoring.md`](../07-monitoring/monitoring.md).
+
+Beszel collects CPU, memory, disk, average load, network activity, and uptime metrics for both Debian VMs.
 
 ## Docker Startup Troubleshooting
 
@@ -231,7 +266,5 @@ Both tests returned `TcpTestSucceeded : True` after the reboot.
 - Immich
 - Jellyfin
 - Nextcloud
-- Uptime Kuma
-- Beszel
 
 These applications are planned and have not yet been deployed.
