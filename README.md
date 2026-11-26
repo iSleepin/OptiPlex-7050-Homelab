@@ -117,7 +117,8 @@ Docker services are deployed using Docker Compose with persistent configuration 
 
 Homepage provides a centralized dashboard with shortcuts to the homelab's management interfaces and applications. It also displays live Proxmox, Uptime Kuma, and Beszel information, including an overview of monitored systems and resource metrics for both Debian VMs.
 
-- Access: `http://<DEBIAN-SERVICES-LAN-IP>:3000`
+- Local access: `http://<DEBIAN-SERVICES-LAN-IP>:3000`
+- Private remote access: `http://<DEBIAN-SERVICES-TAILSCALE-IP>:3000` from an authorized device connected to the tailnet
 - Configuration directory: `/opt/homepage/config/`
 - Deployment directory: `/opt/homepage/`
 - Container image: `ghcr.io/gethomepage/homepage:latest`
@@ -267,6 +268,7 @@ Verified remote connectivity includes:
 | Proxmox VE | 8006 | Tailscale |
 | AMP management | 8080 | Tailscale |
 | Technitium DNS | 443 | Tailscale Serve |
+| Homepage dashboard | 3000 | Direct Tailscale interface binding |
 
 ### Tailscale Serve
 
@@ -275,6 +277,8 @@ Tailscale Serve provides private HTTPS access to the Technitium DNS web interfac
 The service proxies requests to the local Technitium web interface on the Debian services VM.
 
 The HTTPS endpoint is accessible only within the tailnet. Tailscale Funnel is not enabled.
+
+Homepage is also bound directly to the Debian services VM's Tailscale interface on TCP port 3000. Its Docker Compose configuration publishes port 3000 on both the VM's LAN address and Tailscale address, and `HOMEPAGE_ALLOWED_HOSTS` includes the Tailscale address and port. This allows authorized tailnet devices, including a phone using cellular data, to access the dashboard at `http://<DEBIAN-SERVICES-TAILSCALE-IP>:3000`. No Exit Node, subnet router, or router port forwarding is required for this direct service connection.
 
 Actual Tailscale IP addresses and the private MagicDNS hostname are intentionally excluded from this public repository.
 
@@ -462,6 +466,7 @@ This project provides practical experience with:
 - Network troubleshooting
 - Internal DNS architecture
 - Tailscale private networking
+- Remote access to Docker-hosted web applications through Tailscale interface bindings
 - Tailscale Serve
 - Public service tunneling with Playit.gg
 - Application and game-server deployment
