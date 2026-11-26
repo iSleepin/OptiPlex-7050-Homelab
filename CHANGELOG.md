@@ -3,6 +3,27 @@
 
 All notable changes to the OptiPlex 7050 Homelab project are documented here.
 
+## [2026-11-26] - Homepage Remote Access Through Tailscale
+
+### Infrastructure
+
+- Updated the Homepage Docker Compose deployment on VM 100 to publish TCP port 3000 on both the Debian services VM's LAN address and Tailscale address.
+- Added the Tailscale address and port to Homepage's `HOMEPAGE_ALLOWED_HOSTS` setting.
+- Recreated the Homepage container with Docker Compose while preserving its existing configuration and persistent volume.
+- Kept the service private to the LAN and authorized tailnet interfaces; no public port forwarding, Tailscale Funnel, Exit Node, or subnet router was required.
+
+### Verification
+
+- Confirmed the Homepage container reported a healthy status.
+- Confirmed Docker published port 3000 on both the LAN and Tailscale interfaces.
+- Confirmed an HTTP request to the VM's Tailscale address returned `HTTP/1.1 200 OK`.
+- Successfully accessed Homepage from a phone over cellular data with Tailscale enabled.
+
+### Documentation
+
+- Updated the README, Tailscale guide, network overview, and Docker container inventory.
+- Used placeholders for private LAN and Tailscale addresses in public documentation.
+
 ## [2026-11-25] - Monitoring and Observability Milestone
 
 ### Added
