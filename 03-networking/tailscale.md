@@ -38,9 +38,34 @@ The following services were verified over Tailscale:
 |---|---|---:|
 | Proxmox web interface | `<PROXMOX-TAILSCALE-IP>` | 8006 |
 | AMP management | `<AMP-SERVER-TAILSCALE-IP>` | 8080 |
+| Homepage dashboard | `<DEBIAN-SERVICES-TAILSCALE-IP>` | 3000 |
 | Technitium DNS | `<DEBIAN-SERVICES-MAGICDNS-HOSTNAME>` | 443 |
 
 The Technitium web interface uses Tailscale Serve to provide private HTTPS access to the locally hosted Docker container.
+
+## Homepage Remote Access
+
+Homepage runs as a Docker container on the Debian services VM. Its Compose deployment publishes TCP port 3000 on both the VM's LAN address and its Tailscale interface address.
+
+The Homepage service also uses the `HOMEPAGE_ALLOWED_HOSTS` environment setting to permit the Tailscale address and port. The actual address is intentionally represented by a placeholder in this public document.
+
+Relevant Compose configuration (replace placeholders with the VM's actual interface addresses):
+
+```yaml
+environment:
+  HOMEPAGE_ALLOWED_HOSTS: <DEBIAN-SERVICES-LAN-IP>:3000,<DEBIAN-SERVICES-TAILSCALE-IP>:3000,dns.home.arpa:3000
+ports:
+  - "<DEBIAN-SERVICES-LAN-IP>:3000:3000"
+  - "<DEBIAN-SERVICES-TAILSCALE-IP>:3000:3000"
+```
+
+From an authorized device connected to the tailnet, open:
+
+```text
+http://<DEBIAN-SERVICES-TAILSCALE-IP>:3000
+```
+
+The phone was tested with Wi-Fi disabled, cellular data enabled, and the Tailscale connection active. Homepage loaded successfully. Direct access to this VM interface does not require an Exit Node, subnet router, Tailscale Funnel, or router port forwarding.
 
 ## Tailscale Serve
 
@@ -73,15 +98,18 @@ $TechnitiumMagicDNS = "<DEBIAN-SERVICES-MAGICDNS-HOSTNAME>"
 
 Test-NetConnection $ProxmoxTailnetIP -Port 8006
 Test-NetConnection $AmpTailnetIP -Port 8080
+Test-NetConnection "<DEBIAN-SERVICES-TAILSCALE-IP>" -Port 3000
 Test-NetConnection $TechnitiumMagicDNS -Port 443
 ```
 
-All three connectivity tests returned successful TCP connections during verification.
+The Proxmox, AMP, and Technitium connectivity tests returned successful TCP connections during their verification. Homepage was separately verified with an HTTP 200 response from the Debian VM's Tailscale interface and a successful phone test over cellular data.
 
 ## Security Considerations
 
 - Administrative interfaces are accessed through the private tailnet.
 - No router port forwarding is required for private administration.
+- Homepage is bound only to the VM's LAN and Tailscale interface addresses, rather than all host interfaces.
+- Remote Homepage access requires an authorized device connected to the same tailnet.
 - Tailscale Funnel is not enabled.
 - Public Minecraft connectivity is handled separately through Playit.gg.
 - Tailscale authentication credentials and authorization keys must never be committed to Git.
