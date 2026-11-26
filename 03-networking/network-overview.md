@@ -91,7 +91,7 @@ The Deco router maintains the DHCP pool and reservations. Actual private address
 Services hosted on VM 100:
 
 - Technitium DNS Server (TCP/UDP 53 and web administration TCP 5380)
-- Homepage dashboard (TCP 3000)
+- Homepage dashboard (TCP 3000), bound to the VM's LAN and Tailscale interface addresses
 - Uptime Kuma service monitoring (TCP 3001)
 - Beszel Hub and Docker-based Beszel agent (TCP 8090 for the Hub; agent metrics collection)
 - Tailscale Serve for private HTTPS access to Technitium
@@ -126,6 +126,7 @@ The internal DNS zone is `home.arpa`.
 | Access Method | Purpose | Exposure |
 |---|---|---|
 | Tailscale | Private administration of Proxmox, Debian VMs, AMP, and Technitium | Tailnet only |
+| Tailscale direct interface access | Private access to Homepage on TCP 3000 | Tailnet only |
 | Tailscale Serve | Private HTTPS access to Technitium web administration | Tailnet only |
 | Playit.gg | Public Minecraft Java connectivity | Minecraft tunnel only |
 
