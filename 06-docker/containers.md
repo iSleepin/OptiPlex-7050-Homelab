@@ -98,6 +98,40 @@ docker compose up -d
 
 `http://<DEBIAN-SERVICES-LAN-IP>:3000`
 
+Private remote access from an authorized Tailscale device:
+
+`http://<DEBIAN-SERVICES-TAILSCALE-IP>:3000`
+
+The Compose deployment binds TCP port 3000 separately to the Debian services VM's LAN address and Tailscale address. The `HOMEPAGE_ALLOWED_HOSTS` environment setting includes both address-and-port combinations (plus the internal `dns.home.arpa:3000` hostname). The actual interface addresses are intentionally omitted from this public document.
+
+Example Compose settings (use the actual addresses on the target VM):
+
+```yaml
+environment:
+  HOMEPAGE_ALLOWED_HOSTS: <DEBIAN-SERVICES-LAN-IP>:3000,<DEBIAN-SERVICES-TAILSCALE-IP>:3000,dns.home.arpa:3000
+ports:
+  - "<DEBIAN-SERVICES-LAN-IP>:3000:3000"
+  - "<DEBIAN-SERVICES-TAILSCALE-IP>:3000:3000"
+```
+
+Recreate the service after editing the Compose file:
+
+```bash
+cd /opt/homepage
+sudo docker compose up -d
+```
+
+The `sudo` invocation is used because this deployment's Compose configuration references a protected `.env` file.
+
+Verify container health and the published interface bindings:
+
+```bash
+docker ps
+curl -I http://<DEBIAN-SERVICES-TAILSCALE-IP>:3000
+```
+
+An HTTP `200 OK` response confirms Homepage is serving requests on the Tailscale interface. Remote access was also verified from a phone over cellular data with Tailscale enabled. No Exit Node, subnet router, or router port forwarding is needed for this direct connection.
+
 Homepage provides a centralized dashboard with shortcuts to Proxmox VE, Technitium DNS, AMP, and the Minecraft server.
 
 The dashboard also displays live Proxmox, Uptime Kuma, and Beszel information, including an overview of monitored systems and resource metrics for both Debian VMs.
@@ -259,6 +293,7 @@ Both tests returned `TcpTestSucceeded : True` after the reboot.
 - Persistent configuration and logs are stored outside the container.
 - Administrative credentials and secrets are not committed to GitHub.
 - Network services are not intentionally exposed to the public internet.
+- Homepage's remote interface binding is limited to the Debian VM's Tailscale address; access still requires an authorized tailnet device.
 - Administrative interfaces remain restricted to private network or authorized remote access.
 
 ## Future Docker Projects
